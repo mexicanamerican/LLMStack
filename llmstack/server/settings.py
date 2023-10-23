@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'llmstack.datasources.apps.DatasourcesConfig',
     'llmstack.apps.apps.AppsConfig',
     'llmstack.base.apps.BaseConfig',
+    'llmstack.connections.apps.ConnectionsConfig',
     'llmstack.organizations.apps.OrganizationsConfig',
     'flags',
     'allauth',
@@ -405,7 +406,23 @@ PROVIDERS = [
         'datasource_processors_exclude': [],
         'slug': 'stabilityai',
     },
+    {
+        'name': 'LinkedIn',
+        'processor_packages': ['llmstack.processors.providers.linkedin'],
+        'slug': 'linkedin',
+    }
 ]
+
+# Include networking providers if they are enabled
+try:
+    import jnpr.junos
+    PROVIDERS.append({
+        'name': 'Juniper',
+        'processor_packages': ['llmstack.processors.providers.juniper'],
+        'slug': 'juniper',
+    })
+except ImportError:
+    pass
 
 PROCESSOR_PROVIDERS = sum(list(
     map(lambda entry: entry['processor_packages'], filter(
