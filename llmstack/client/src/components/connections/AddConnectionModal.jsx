@@ -151,7 +151,6 @@ function AddConnectionModal({ open, onCancelCb, onSaveCb, connection }) {
               message.output &&
               message.output.ws_url
             ) {
-              console.log(message);
               setRemoteBrowserWsUrl(message.output.ws_url);
               setRemoteBrowserTimeout(message.output.timeout);
               setIsRemoteBrowser(true);
@@ -306,13 +305,26 @@ function AddConnectionModal({ open, onCancelCb, onSaveCb, connection }) {
               configuration: formData,
             });
           }}
+          widgets={{
+            oauthBtn: (props) => {
+              return (
+                <Button
+                  variant="contained"
+                  onClick={() => {
+                    window.open(props.schema.loginUrl, "_blank");
+                  }}
+                >
+                  {props.schema.btnText}
+                </Button>
+              );
+            },
+          }}
         />
         {isRemoteBrowser && (
           <RemoteBrowser
             wsUrl={remoteBrowserWsUrl}
             timeout={remoteBrowserTimeout}
             onClose={() => {
-              console.log("Closing remote browser");
               setIsRemoteBrowser(false);
               setRemoteBrowserWsUrl(null);
               connectionWs.send(
